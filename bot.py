@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 import TweetCollector
+import CalendarIntegration
 import traceback
 import random
 
@@ -16,6 +17,7 @@ weRateDogs = TweetCollector.TweetCollector(4196983835)
 #DailyDose of Puppies twitter
 theDailyPuppy = TweetCollector.TweetCollector(2357252378)
 
+calendar = CalendarIntegration.CalendarIntegration()
 
 @bot.event
 async def on_ready():
@@ -37,9 +39,13 @@ async def calc(left : int, right : int):
 @bot.command()
 async def randomPupper():
     """Tweepy test. Prints a tweet from the user's timeline"""
-    await bot.say(theDailyPuppy.getTweetFromTimeline(100)[random.randint(0,100)])
+    await bot.say(theDailyPuppy.getTweetsFromTimeline(100)[random.randint(0,100)])
 
+@bot.command()
+async def calendarAdd(title, day, description = ''):
+    """Test of the Google Calendar integration"""
 
+    await bot.say(calendar.create_event(title, day, description))
 
 bot.run('NDIyMTMyODY3NTI3NjA2Mjgy.DYXbUA.0o1GzCytBr8DJcdUU7WvXOgKAts')
 
