@@ -30,7 +30,7 @@ async def hello():
     await bot.say('Hello')
 
 @bot.command()
-async def add(left : int, right : int):
+async def calc(left : int, right : int):
     """"Adds two numbers together"""
     await bot.say(left + right)
 

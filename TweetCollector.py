@@ -19,7 +19,7 @@ class TweetCollector:
     def getTimeline(self):
         return self.timeLine
 
-    def getTweetFromTimeline(self, amountOfTweets):
+    def getTweetsFromTimeline(self, amountOfTweets):
         #output is a List
         outputList = []
 
