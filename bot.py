@@ -2,9 +2,9 @@ import discord
 from discord.ext import commands
 import TweetCollector
 import CalendarIntegration
-import traceback
 import random
 import os
+from settings import BOT_TOKEN
 
 #bot = commands.Bot(command_prefix='The Good Boy', description='Posts doggo videos or something')
 description = 'Posts doggo videos or something'
@@ -48,6 +48,6 @@ async def calendarAdd(title, day, description = ''):
 
     await bot.say(calendar.create_event(title, day, description))
 
-bot.run(os.environ['BOT_TOKEN'])
+bot.run(BOT_TOKEN)
 
 

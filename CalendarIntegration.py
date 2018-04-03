@@ -12,6 +12,8 @@ import os
 from apiclient import discovery
 from oauth2client import client, tools, file
 
+from settings import CALENDAR
+
 import datetime
 
 try:
@@ -26,7 +28,7 @@ class CalendarIntegration:
         self.SCOPES = 'https://www.googleapis.com/auth/calendar'
         self.CLIENT_SECRET_FILE = 'client_secret.json'
         self.APPLICATION_NAME = 'The Good Boy'
-        self.CALENDAR_ID = ''
+        self.CALENDAR_ID = CALENDAR
         self.store = file.Storage('client_id.json')
 
         #Set up credentials
@@ -48,6 +50,7 @@ class CalendarIntegration:
         http = self.credentials.authorize(httplib2.Http())
         self.service = discovery.build('calendar', 'v3', http = http)
 
+    #creates an all day event on the specified day description is optional
     def create_event(self, title, day, description = ''):
         #TODO refactor this to accept times and be mindful of incorrect formatting
         event = {
@@ -64,5 +67,5 @@ class CalendarIntegration:
 
 
 
-
+        
 
