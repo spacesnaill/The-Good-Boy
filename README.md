@@ -8,3 +8,5 @@ Tweepy (http://docs.tweepy.org/en/latest/)
 Discord.py (http://discordpy.readthedocs.io/en/latest/api.html)
 
 Google Calendar API (https://developers.google.com/calendar/)
+
+Dotenv (https://github.com/theskumar/python-dotenv)

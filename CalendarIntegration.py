@@ -65,7 +65,7 @@ class CalendarIntegration:
         event = self.service.events().insert(calendarId = self.CALENDAR_ID, body = event).execute()
         return 'Event created as: %s' % (event.get('htmlLink'))
 
+    #returns all the events on a specified day
+    def check_day(self, day):
 
-
-        
 
