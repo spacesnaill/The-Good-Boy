@@ -1,10 +1,11 @@
 import tweepy
+import os
 
 class TweetCollector:
 
     #Set up to use the twitter api through Tweepy
-    auth = tweepy.OAuthHandler('','')
-    auth.set_access_token('','')
+    auth = tweepy.OAuthHandler(os.environ["TWITTER_API_KEY"], os.environ["TWITTER_API_SECRET"])
+    auth.set_access_token(os.environ["TWITTER_ACCESS_TOKEN"], os.environ["TWITTER_ACCESS_TOKEN_SECRET"])
     tweepy_api = tweepy.API(auth)
 
     def __init__(self, twitterID):
