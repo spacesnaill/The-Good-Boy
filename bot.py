@@ -47,6 +47,6 @@ async def calendarAdd(title, day, description = ''):
 
     await bot.say(calendar.create_event(title, day, description))
 
-bot.run('NDIyMTMyODY3NTI3NjA2Mjgy.DYXbUA.0o1GzCytBr8DJcdUU7WvXOgKAts')
+bot.run('')
 
 

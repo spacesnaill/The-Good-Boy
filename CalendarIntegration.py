@@ -26,7 +26,7 @@ class CalendarIntegration:
         self.SCOPES = 'https://www.googleapis.com/auth/calendar'
         self.CLIENT_SECRET_FILE = 'client_secret.json'
         self.APPLICATION_NAME = 'The Good Boy'
-        self.CALENDAR_ID = '09pb0dpoq85uhk91t4l88d5n2c@group.calendar.google.com'
+        self.CALENDAR_ID = ''
         self.store = file.Storage('client_id.json')
 
         #Set up credentials
