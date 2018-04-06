@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 import TweetCollector
 import CalendarIntegration
+import Weather
 import random
 import os
 from settings import BOT_TOKEN
@@ -19,6 +20,8 @@ weRateDogs = TweetCollector.TweetCollector(4196983835)
 theDailyPuppy = TweetCollector.TweetCollector(2357252378)
 
 calendar = CalendarIntegration.CalendarIntegration()
+
+owm = Weather.Weather()
 
 @bot.event
 async def on_ready():
@@ -74,6 +77,10 @@ async def delete_event_on_date(event_name, day='{}'.format(date.today())):
         If no date is provided, it will default to today's date
     """
     await bot.say(calendar.delete_event(event_name, day))
+
+@bot.command()
+async def get_weather(city, country):
+    await bot.say(owm.get_weather(city, country))
 
 bot.run(BOT_TOKEN)
 
