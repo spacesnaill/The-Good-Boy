@@ -101,6 +101,17 @@ async def get_weather(location):
     await bot.say("**Weather data for {}:**".format(location))
     await bot.say(weather_data)
 
+location_list = ['Frostburg, MD USA']
+@bot.command()
+async def add_to_weather_locations(location):
+    """
+    Add another location to the list of weather locations for regular weather updates
+    :param location:
+    :return:
+    """
+    location_list.append(location)
+
+
 @bot.command()
 async def convert_units(amount, input_units, output_units):
     """
@@ -110,7 +121,7 @@ async def convert_units(amount, input_units, output_units):
     :param amount:
     :param input_units:
     :param output_units:
-    :return: 
+    :return:
     """
     await bot.say(units.convert_units(amount, input_units, output_units))
 
@@ -121,8 +132,15 @@ Background Tasks
 #TODO set this up to print out a weather update to a specific channel every x amount of hours
 client = discord.Client()
 async def weather_update():
-    pass
+    await client.wait_until_ready()
+    channel = discord.utils.get(discord.Server.channels, name='weather')
+    while not client.is_closed:
+        for location in location_list:
+            pass
+        await asyncio.sleep(14400)
 
 bot.run(BOT_TOKEN)
+#client.loop.create_task(weather_update())
+#client.run('token')
 
 
