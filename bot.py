@@ -4,6 +4,7 @@ import asyncio
 import TweetCollector
 import CalendarIntegration
 import Weather
+import UnitConversion
 import random
 import os
 from settings import BOT_TOKEN
@@ -23,6 +24,8 @@ theDailyPuppy = TweetCollector.TweetCollector(2357252378)
 calendar = CalendarIntegration.CalendarIntegration()
 
 owm = Weather.Weather()
+
+units = UnitConversion.UnitConversion()
 
 @bot.event
 async def on_ready():
@@ -97,6 +100,21 @@ async def get_weather(location):
     weather_data = owm.get_weather(geocoded_location.latitude, geocoded_location.longitude)
     await bot.say("**Weather data for {}:**".format(location))
     await bot.say(weather_data)
+
+@bot.command()
+async def convert_units(amount, input_units, output_units):
+    """
+    Converts any number of one unit to another as long as it makes sense to convert them
+    Usage: ?convert_units 200 inches feet
+    The original unit is the first unit, and what you want that converted to is the second unit
+    :param amount:
+    :param input_units:
+    :param output_units:
+    :return: 
+    """
+    await bot.say(units.convert_units(amount, input_units, output_units))
+
+
 """
 Background Tasks
 """
