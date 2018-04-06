@@ -8,6 +8,7 @@
 
 import httplib2
 import os
+import re
 
 from apiclient import discovery
 from oauth2client import client, tools, file
@@ -51,8 +52,13 @@ class CalendarIntegration:
         self.service = discovery.build('calendar', 'v3', http = http)
 
     #creates an all day event on the specified day description is optional
-    def create_event(self, title, day, description = ''):
+    def create_event(self, title, day, time=0, description = ''):
         #TODO refactor this to accept times and be mindful of incorrect formatting
+
+        #check the make sure the format of the date is correct, if it is not return an error message
+        if not re.match(r'[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]', day):
+            return "The format of your date is incorrect. Please make sures it follows this format: YYYY-MM-DD"
+
         event = {
             'summary' : '{}'.format(title),
             'location' : 'Roll20',
@@ -64,8 +70,27 @@ class CalendarIntegration:
         }
         event = self.service.events().insert(calendarId = self.CALENDAR_ID, body = event).execute()
         return 'Event created as: %s' % (event.get('htmlLink'))
+        return 'Success'
 
     #returns all the events on a specified day
+    #grabs all the event summaries from the given day, stores them in output_list and then returns that list
     def check_day(self, day):
+        if not re.match(r'[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]', day):
+            return "The format of your date is incorrect. Please make sures it follows this format: YYYY-MM-DD"
 
+        date = day.split('-')
+        #date = datetime.datetime(int(date[0]), int(date[1]), int(date[2]))
+        page_token = None
+        output_list = []
+        while True:
+            events = self.service.events().list(calendarId = self.CALENDAR_ID,
+                                                timeMin='{}-{}-{}T00:00:00Z'.format(date[0], date[1], date[2]),
+                                                timeMax='{}-{}-{}T00:00:00Z'.format(date[0], date[1], (int(date[2])+1)),
+                                                pageToken = page_token,
+                                                ).execute()
+            for event in events['items']:
+                output_list.append(event['summary'])
+            page_token = events.get('nextPageToken')
+            if not page_token:
+                return output_list
 

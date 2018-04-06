@@ -44,9 +44,19 @@ async def randomPupper():
 
 @bot.command()
 async def calendarAdd(title, day, description = ''):
-    """Test of the Google Calendar integration"""
+    """Add an event to the calendar. Events need a Title, a day
+        Example usage: ?calendarAdd Event1 2018-09-22
+        Date MUST be in the format of YYYY-MM-DD to be accepted
+    """
 
     await bot.say(calendar.create_event(title, day, description))
+
+@bot.command()
+async def get_events_on_date(day):
+    await bot.say('Here are the events on: {}'.format(day))
+    for event in calendar.check_day(day):
+        await bot.say(event)
+
 
 bot.run(BOT_TOKEN)
 
