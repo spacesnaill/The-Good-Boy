@@ -78,9 +78,19 @@ async def delete_event_on_date(event_name, day='{}'.format(date.today())):
     """
     await bot.say(calendar.delete_event(event_name, day))
 
+from geopy.geocoders import Nominatim
 @bot.command()
-async def get_weather(city, country):
-    await bot.say(owm.get_weather(city, country))
+async def get_weather(location):
+    """
+    Provide a location and receive relatively up to date weather information. You can either be highly specific, such as
+    an exact address, or you can be more broad, such as a city and country.
+    :param location:
+    :return:
+    """
+    geolocator = Nominatim()
+    geocoded_location = geolocator.geocode(location)
+    await bot.say("**Weather data for {}:**".format(location))
+    await bot.say(owm.get_weather(geocoded_location.latitude, geocoded_location.longitude))
 
 bot.run(BOT_TOKEN)
 

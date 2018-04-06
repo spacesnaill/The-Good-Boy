@@ -12,15 +12,15 @@ class Weather:
         self.owm = pyowm.OWM(OWM_API_KEY)
 
 
-    def get_weather(self, city, country):
-        observation = self.owm.weather_at_place('{},{}'.format(city, country))
+    def get_weather(self, latitude, longitude):
+        observation = self.owm.weather_at_coords(latitude, longitude)
         weather = observation.get_weather()
-        return 'Current Temperature: {} ' \
-               'Temperature High: {}' \
-               'Temperature Low: {}' \
-               'Wind Speed: {}' \
-               'Cloudiness %: {}' \
-               'Humidity: {}' \
+        return 'Current Temperature: {} F\N{DEGREE SIGN}\n' \
+               'Temperature High: {} F\N{DEGREE SIGN}\n' \
+               'Temperature Low: {} F\N{DEGREE SIGN}\n' \
+               'Wind Speed: {}mph\n' \
+               'Cloudiness: {}%\n' \
+               'Humidity: {}\n' \
                'Status: {}'.format(weather.get_temperature('fahrenheit')['temp'],
                                    weather.get_temperature('fahrenheit')['temp_max'],
                                    weather.get_temperature('fahrenheit')['temp_min'],
