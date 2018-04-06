@@ -1,8 +1,8 @@
 
 #DONE import the google calendar API
 #DONE make a method to push events to the calendar
-#TODO make a method to pull events from a specific day on the calendar
-#TODO make a method to remove an event from the calendar
+#DONE make a method to pull events from a specific day on the calendar
+#DONE make a method to remove an event from the calendar
 #TODO make a method to edit an event on the calendar
 #TODO make a method to post the events for the day at 7am EST or post 'No events' if no events (this'll probably be implemented in bot.py)
 
@@ -32,7 +32,7 @@ class CalendarIntegration:
         self.CALENDAR_ID = CALENDAR
         self.store = file.Storage('client_id.json')
 
-        #Set up credentials
+        # Set up credentials
         home_dir = os.path.expanduser('~')
         credential_dir = os.path.join(home_dir, '.credentials')
         if not os.path.exists(credential_dir):
@@ -47,11 +47,11 @@ class CalendarIntegration:
                 self.credentials = tools.run_flow(flow, store, flags)
             print('Storing credentials to ' + credential_path)
 
-        #Set up service
+        # Set up service
         http = self.credentials.authorize(httplib2.Http())
         self.service = discovery.build('calendar', 'v3', http = http)
 
-    #creates an all day event on the specified day description is optional
+    # creates an all day event on the specified day description is optional
     def create_event(self, title, day, time=0, description = ''):
         #TODO refactor this to accept times and be mindful of incorrect formatting
 
@@ -72,14 +72,14 @@ class CalendarIntegration:
         return 'Event created as: %s' % (event.get('htmlLink'))
         return 'Success'
 
-    #returns all the events on a specified day
-    #grabs all the event summaries from the given day, stores them in output_list and then returns that list
+    # returns all the events on a specified day
+    # grabs all the event summaries from the given day, stores them in output_list and then returns that list
     def check_day(self, day):
         if not re.match(r'[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]', day):
             return "The format of your date is incorrect. Please make sures it follows this format: YYYY-MM-DD"
 
         date = day.split('-')
-        #date = datetime.datetime(int(date[0]), int(date[1]), int(date[2]))
+        # date = datetime.datetime(int(date[0]), int(date[1]), int(date[2]))
         page_token = None
         output_list = []
         while True:
@@ -89,8 +89,18 @@ class CalendarIntegration:
                                                 pageToken = page_token,
                                                 ).execute()
             for event in events['items']:
-                output_list.append(event['summary'])
+                output_list.append(event)
             page_token = events.get('nextPageToken')
             if not page_token:
                 return output_list
+
+    # removes an event from the calendar at the given date. Must be called multiple times if multiple events have the
+    # same name
+    def delete_event(self, event_name, date):
+        list_of_events = self.check_day(date)
+        for event in list_of_events:
+            if event['summary'] == event_name:
+                self.service.events().delete(calendarId=self.CALENDAR_ID, eventId=event['id']).execute()
+                return "Successfully deleted event: {} with ID {}".format(event_name, event['id'])
+        return "Could not find event: {}".format(event_name)
 

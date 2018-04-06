@@ -42,21 +42,38 @@ async def randomPupper():
     """Tweepy test. Prints a tweet from the user's timeline"""
     await bot.say(theDailyPuppy.getTweetsFromTimeline(100)[random.randint(0,100)])
 
+from datetime import date
 @bot.command()
-async def calendarAdd(title, day, description = ''):
+async def add_event_to_calendar(title, day='{}'.format(date.today()), description = ''):
     """Add an event to the calendar. Events need a Title, a day
-        Example usage: ?calendarAdd Event1 2018-09-22
+        Example usage: ?add_event_to_calendar Event1 2018-09-22
         Date MUST be in the format of YYYY-MM-DD to be accepted
+        If no date is provided, it will default to today's date
     """
 
     await bot.say(calendar.create_event(title, day, description))
 
 @bot.command()
-async def get_events_on_date(day):
+async def get_events_on_date(day='{}'.format(date.today())):
+    """Get a list of all events on the calendar for a specified day
+            Example usage: ?get_events_on_date 2018-09-22
+            Date MUST be in the format of YYYY-MM-DD to be accepted
+            If no date is provided, it will default to today's date
+    """
     await bot.say('Here are the events on: {}'.format(day))
     for event in calendar.check_day(day):
-        await bot.say(event)
+        await bot.say(event['summary'])
 
+@bot.command()
+async def delete_event_on_date(event_name, day='{}'.format(date.today())):
+    """Delete the first occurence of an event for the specified day.
+        First occurence means if there are multiple evetnts with the same name on the same day, this must be run once
+        for each of those events.
+        Example usage: ?delete_event_on_date Event1 2018-09-22
+        Date MUST be in the format of YYYY-MM-DD to be accepted
+        If no date is provided, it will default to today's date
+    """
+    await bot.say(calendar.delete_event(event_name, day))
 
 bot.run(BOT_TOKEN)
 
