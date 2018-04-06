@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+import asyncio
 import TweetCollector
 import CalendarIntegration
 import Weather
@@ -30,6 +31,10 @@ async def on_ready():
     print(bot.user.id)
     print('--------')
 
+
+"""
+Commands
+"""
 @bot.command()
 async def hello():
     """Says Hello"""
@@ -89,8 +94,16 @@ async def get_weather(location):
     """
     geolocator = Nominatim()
     geocoded_location = geolocator.geocode(location)
+    weather_data = owm.get_weather(geocoded_location.latitude, geocoded_location.longitude)
     await bot.say("**Weather data for {}:**".format(location))
-    await bot.say(owm.get_weather(geocoded_location.latitude, geocoded_location.longitude))
+    await bot.say(weather_data)
+"""
+Background Tasks
+"""
+#TODO set this up to print out a weather update to a specific channel every x amount of hours
+client = discord.Client()
+async def weather_update():
+    pass
 
 bot.run(BOT_TOKEN)
 
